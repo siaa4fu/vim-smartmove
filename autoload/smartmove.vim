@@ -1,7 +1,7 @@
 " File:        autoload/smartmove.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
-" Last Change: 2013-10-22.
+" Last Change: 2013-10-23.
 
 scriptencoding utf-8
 
@@ -162,23 +162,24 @@ function! smartmove#searchjump(motion, mode) " {{{
     endfor
   catch /^Vim\%((\a\+)\)\=:E486/
     echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
-    return
+    return &hlsearch
   endtry
-  call feedkeys(":\<C-u>set hlsearch\<CR>", 'n')
   if (isForwardMotion && line('.') == line('w$'))
   \ || (!isForwardMotion && line('.') == line('w0'))
     normal! zz
   endif
+  return 1
 endfunction " }}}
 
 function! smartmove#patsearch(pat, ...) " {{{
   let @/ = a:pat
   call histadd('/', a:pat)
   let v:searchforward = get(a:, 1, 1)
+  " if a mapping is still being executed, characters in feedkeys() come after them
   if g:smartmove_no_jump_search
-    call feedkeys(":\<C-u>set hlsearch\<CR>", 'n')
+    call feedkeys(":\<C-u>set hlsearch | echo\<CR>", 'n')
   else
-    call smartmove#searchjump('n', 'n')
+    call feedkeys("\<Plug>(smartmove-searchjump-n)", 'm')
   endif
 endfunction " }}}
 
