@@ -155,6 +155,7 @@ function! smartmove#searchjump(motion, mode) " {{{
   let isForwardMotion =
         \ a:motion ==# (v:searchforward ? 'n' : 'N')
   call s:precmd(a:mode, 0)
+  let startline = line('.')
   try
     for i in range(cnt)
       call s:skipClosedFold(isForwardMotion)
@@ -164,8 +165,10 @@ function! smartmove#searchjump(motion, mode) " {{{
     echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
     return &hlsearch
   endtry
-  if (isForwardMotion && line('.') == line('w$'))
+  let endline = line('.')
+  if ((isForwardMotion && line('.') == line('w$'))
   \ || (!isForwardMotion && line('.') == line('w0'))
+  \ ) && startline != endline
     normal! zz
   endif
   return 1
