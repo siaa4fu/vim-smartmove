@@ -1,7 +1,7 @@
 " File:        autoload/smartmove.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
-" Last Change: 2013-10-23.
+" Last Change: 2013-11-14.
 
 scriptencoding utf-8
 
@@ -153,7 +153,7 @@ endfunction " }}}
 function! smartmove#searchjump(motion, mode) " {{{
   let cnt = v:count1
   let isForwardMotion =
-        \ a:motion ==# v:searchforward ? 'n' : 'N'
+        \ a:motion ==# (v:searchforward ? 'n' : 'N')
   call s:precmd(a:mode, 0)
   try
     for i in range(cnt)
