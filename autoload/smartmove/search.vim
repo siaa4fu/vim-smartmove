@@ -1,14 +1,21 @@
 " File:        autoload/smartmove/search.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
-" Last Change: 2013-09-25.
+" Last Change: 2014-01-21.
 
 scriptencoding utf-8
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-" braces, jabraces, codes, jacodes, specific patterns
+function! smartmove#search#init_hlsearch_mapping()
+  if g:smartmove_search_leader_key == '' | return | endif
+  execute 'nnoremap <silent>'
+        \ g:smartmove_search_leader_key . '<CR>'
+        \ ':<C-u>set hlsearch!<CR>'
+endfunction
+
+" s:pats {{{
 let s:pats = {
 \ 'parens'                     : [ '('         , ')'                   , 1 ],
 \ 'brackets'                   : [ '{'         , '}'                   , 1 ],
@@ -72,30 +79,33 @@ let s:pats = {
 \ 
 \ 'ordered-lists'              : [ '\^\d\+\[.\uff0e] \?'               , 0 ],
 \}
-
-let g:smartmove_search_prefix_key = get(g:, 'smartmove_search_prefix_key', '')
-
-function! smartmove#search#map(name, ...)
-  if !has_key(s:pats, a:name) | return | endif
-  let isSurrounded = s:pats[a:name][-1]
-  let pat = [
-  \ s:pats[a:name][0],
-  \ len(s:pats[a:name]) > 2 ? s:pats[a:name][1] : s:pats[a:name][0]
-  \]
-  let pats = [
-  \ substitute('\V\%(' . (pat[0] ==# pat[1] ? pat[0] : '\%(' . pat[0] . '\<Bar>' . pat[1] . '\)') . '\)\+', "'", "''", 'g'),
-  \ substitute('\V' . pat[0] . '\%(\%(' . pat[1] . '\)\@!\.\)\*' . pat[1], "'", "''", 'g'),
-  \ substitute('\V' . pat[0] . '\zs\%(\%(' . pat[1] . '\)\@!\.\)\*\ze' . pat[1], "'", "''", 'g'),
-  \]
-  for lhs in a:000
-    execute 'nnoremap <silent>' g:smartmove_search_prefix_key . lhs
-          \  ':<C-u>call smartmove#patsearch(''' . pats[0] . ''')<CR>'
-    if isSurrounded
-      execute 'nnoremap <silent>' g:smartmove_search_prefix_key . 'a' . lhs
-            \  ':<C-u>call smartmove#patsearch(''' . pats[1] . ''')<CR>'
-      execute 'nnoremap <silent>' g:smartmove_search_prefix_key . 'i' . lhs
-            \  ':<C-u>call smartmove#patsearch(''' . pats[2] . ''')<CR>'
-    endif
+" }}}
+function! smartmove#search#init_mappings(do_mappings, motions)
+  if g:smartmove_search_leader_key == '' | return | endif
+  for [name, keys] in items(a:motions)
+    if ! has_key(s:pats, name) | continue | endif
+    let isSurrounded = s:pats[name][-1]
+    let pat = [
+    \ s:pats[name][0],
+    \ len(s:pats[name]) > 2 ? s:pats[name][1] : s:pats[name][0]
+    \]
+    let pats = [
+    \ substitute('\V\%(' . (pat[0] ==# pat[1] ? pat[0] : '\%(' . pat[0] . '\<Bar>' . pat[1] . '\)') . '\)\+', "'", "''", 'g'),
+    \ substitute('\V' . pat[0] . '\%(\%(' . pat[1] . '\)\@!\.\)\*' . pat[1], "'", "''", 'g'),
+    \ substitute('\V' . pat[0] . '\zs\%(\%(' . pat[1] . '\)\@!\.\)\*\ze' . pat[1], "'", "''", 'g'),
+    \]
+    for lhs in keys
+      execute 'nnoremap <silent>'
+            \ g:smartmove_search_leader_key . lhs
+            \ ':<C-u>call smartmove#patsearch(''' . pats[0] . ''')<CR>'
+      if ! isSurrounded | continue | endif
+      execute 'nnoremap <silent>'
+            \ g:smartmove_search_leader_key . 'a' . lhs
+            \ ':<C-u>call smartmove#patsearch(''' . pats[1] . ''')<CR>'
+      execute 'nnoremap <silent>'
+            \ g:smartmove_search_leader_key . 'i' . lhs
+            \ ':<C-u>call smartmove#patsearch(''' . pats[2] . ''')<CR>'
+    endfor
   endfor
 endfunction
 
