@@ -14,9 +14,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:do_mappings = get(g:, 'smartmove_search_do_mappings', {})
-for kind in ['hlsearch', 'braces', 'jabraces', 'codes', 'jacodes', 'specialpats']
-  if ! has_key(s:do_mappings, kind) || s:do_mappings[kind] != 0
-    let s:do_mappings[kind] = 1
+for s:kind in ['hlsearch', 'braces', 'jabraces', 'codes', 'jacodes', 'specialpats']
+  if ! has_key(s:do_mappings, s:kind) || s:do_mappings[s:kind] != 0
+    let s:do_mappings[s:kind] = 1
   endif
 endfor
 let g:smartmove_search_leader_key = get(g:, 'smartmove_search_leader_key', '')
