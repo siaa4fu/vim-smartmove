@@ -1,4 +1,4 @@
-" File:        autoload/search/search.vim
+" File:        autoload/smartmove/search.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
 " Last Change: 2013-09-25.
