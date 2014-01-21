@@ -81,7 +81,7 @@ let s:pats = {
 \}
 " }}}
 function! smartmove#search#init_mappings(do_mappings, motions)
-  if g:smartmove_search_leader_key == '' | return | endif
+  if ! a:do_mappings || g:smartmove_search_leader_key == '' | return | endif
   for [name, keys] in items(a:motions)
     if ! has_key(s:pats, name) | continue | endif
     let isSurrounded = s:pats[name][-1]
