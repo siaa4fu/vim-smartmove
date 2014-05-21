@@ -13,8 +13,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " motions are used instead of w, b, e, ge, n and N commands
-"   *, #, g* and g# commands use n command
+" *, #, g* and g# commands use n command
 let g:smartmove_motions = get(g:, 'smartmove_motions', {})
+" scroll speed (non-negative integer)
+let g:scroll_speed = get(g:, 'smartmove_scroll_speed', 1)
 " make *, #, g* and g# commands stay on a current word
 let g:smartmove_no_jump_search = get(g:, 'smartmove_no_jump_search', 0)
 
@@ -49,18 +51,18 @@ inoremap <silent> <Plug>(smartmove-end)  <C-o>:<C-u>call smartmove#end('i')<CR>
 " }}}
 
 " up-down-motions {{{
-nnoremap <silent> <Plug>(smartmove-smoothscroll-f) :<C-u>call smartmove#smoothscroll('down', 2, 'n', 2)<CR>
-nnoremap <silent> <Plug>(smartmove-smoothscroll-b) :<C-u>call smartmove#smoothscroll('up'  , 2, 'n', 2)<CR>
-nnoremap <silent> <Plug>(smartmove-smoothscroll-d) :<C-u>call smartmove#smoothscroll('down', 1, 'n', 2)<CR>
-nnoremap <silent> <Plug>(smartmove-smoothscroll-u) :<C-u>call smartmove#smoothscroll('up'  , 1, 'n', 2)<CR>
-xnoremap <silent> <Plug>(smartmove-smoothscroll-f) :<C-u>call smartmove#smoothscroll('down', 2, 'x', 2)<CR>
-xnoremap <silent> <Plug>(smartmove-smoothscroll-b) :<C-u>call smartmove#smoothscroll('up'  , 2, 'x', 2)<CR>
-xnoremap <silent> <Plug>(smartmove-smoothscroll-d) :<C-u>call smartmove#smoothscroll('down', 1, 'x', 2)<CR>
-xnoremap <silent> <Plug>(smartmove-smoothscroll-u) :<C-u>call smartmove#smoothscroll('up'  , 1, 'x', 2)<CR>
-inoremap <silent> <Plug>(smartmove-smoothscroll-f) <C-o>:<C-u>call smartmove#smoothscroll('down', 2, 'i', 2)<CR>
-inoremap <silent> <Plug>(smartmove-smoothscroll-b) <C-o>:<C-u>call smartmove#smoothscroll('up'  , 2, 'i', 2)<CR>
-inoremap <silent> <Plug>(smartmove-smoothscroll-d) <C-o>:<C-u>call smartmove#smoothscroll('down', 1, 'i', 2)<CR>
-inoremap <silent> <Plug>(smartmove-smoothscroll-u) <C-o>:<C-u>call smartmove#smoothscroll('up'  , 1, 'i', 2)<CR>
+nnoremap <silent> <Plug>(smartmove-smoothscroll-f) :<C-u>call smartmove#smoothscroll('f', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-smoothscroll-b) :<C-u>call smartmove#smoothscroll('b', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-smoothscroll-d) :<C-u>call smartmove#smoothscroll('d', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-smoothscroll-u) :<C-u>call smartmove#smoothscroll('u', 'n')<CR>
+xnoremap <silent> <Plug>(smartmove-smoothscroll-f) :<C-u>call smartmove#smoothscroll('f', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-smoothscroll-b) :<C-u>call smartmove#smoothscroll('b', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-smoothscroll-d) :<C-u>call smartmove#smoothscroll('d', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-smoothscroll-u) :<C-u>call smartmove#smoothscroll('u', 'x')<CR>
+inoremap <silent> <Plug>(smartmove-smoothscroll-f) <C-o>:<C-u>call smartmove#smoothscroll('f', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-smoothscroll-b) <C-o>:<C-u>call smartmove#smoothscroll('b', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-smoothscroll-d) <C-o>:<C-u>call smartmove#smoothscroll('d', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-smoothscroll-u) <C-o>:<C-u>call smartmove#smoothscroll('u', 'i')<CR>
 " }}}
 
 " search-motions {{{

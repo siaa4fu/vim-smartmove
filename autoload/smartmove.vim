@@ -131,18 +131,26 @@ function! smartmove#end(mode) " {{{
   endif
 endfunction " }}}
 
-function! smartmove#smoothscroll(dir, unit, mode, speed) " {{{
+function! smartmove#smoothscroll(motion, mode) " {{{
   let cnt = v:count1
+  let scrollForward =
+        \   a:motion ==# 'f' || a:motion ==# 'd' ? 1
+        \ : a:motion ==# 'b' || a:motion ==# 'u' ? 0
+        \ : 1
+  let unit =
+        \   a:motion ==# 'f' || a:motion ==# 'b' ? 2
+        \ : a:motion ==# 'd' || a:motion ==# 'u' ? 1
+        \ : 2
   call s:precmd(a:mode, 1)
-  let n = (winheight(0) / 2) * cnt * a:unit
-  if a:dir ==# 'down'
+  let n = (winheight(0) / 2) * cnt * unit
+  if scrollForward
     let n = min([n, line('$') - line('w$')])
     let key = line('.') == line('w$') ? "\<C-e>j" : "j\<C-e>"
-  elseif a:dir ==# 'up'
+  else
     let n = min([n, line('w0') - 1])
     let key = line('.') == line('w0') ? "\<C-y>k" : "k\<C-y>"
   endif
-  let i = cnt * a:unit * a:speed
+  let i = cnt * unit * g:smartmove_scroll_speed
   while n > 0
     let n -= 1
     silent execute 'normal!' key
