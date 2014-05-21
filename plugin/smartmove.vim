@@ -1,7 +1,6 @@
 " File:        plugin/smartmove.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
-" Last Change: 2013-10-23.
 
 scriptencoding utf-8
 

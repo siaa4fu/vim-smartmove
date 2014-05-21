@@ -1,7 +1,6 @@
 " File:        autoload/smartmove.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
-" Last Change: 2013-11-14.
 
 scriptencoding utf-8
 
