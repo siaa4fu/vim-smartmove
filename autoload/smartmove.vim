@@ -109,7 +109,7 @@ endfunction " }}}
 
 function! smartmove#wiw(motion, mode) " {{{
   let cnt = v:count1
-  let isForwardMotion =
+  let moveForward =
         \   a:motion ==# 'w' || a:motion ==# 'e'  ? 1
         \ : a:motion ==# 'b' || a:motion ==# 'ge' ? 0
         \ : 1
@@ -123,7 +123,7 @@ function! smartmove#wiw(motion, mode) " {{{
         \ : a:motion ==# 'e' || a:motion ==# 'ge' ? wiw_tail
         \ : wiw_head
   for i in range(cnt)
-    let isMoved = search(pat, (isForwardMotion ? '' : 'b') . 'W') > 0
+    let isMoved = search(pat, (moveForward ? '' : 'b') . 'W') > 0
     if !isMoved | break | endif
   endfor
 endfunction " }}}
