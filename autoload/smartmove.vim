@@ -107,6 +107,27 @@ function! smartmove#word(motion, mode) " {{{
   endfor
 endfunction " }}}
 
+function! smartmove#wiw(motion, mode) " {{{
+  let cnt = v:count1
+  let moveForward =
+        \   a:motion ==# 'w' || a:motion ==# 'e'  ? 1
+        \ : a:motion ==# 'b' || a:motion ==# 'ge' ? 0
+        \ : 1
+  call s:precmd(a:mode,
+        \ a:motion ==# 'e' || a:motion ==# 'ge')
+  " rhysd/vim-textobj-wiw の regexp を参考
+  let wiw_head = '\%(\(\<.\)\|\(\u\l\|\l\@<=\u\)\|\(\A\@<=\a\)\)'
+  let wiw_tail = '\%(\(.\>\)\|\(\l\u\@=\|\u\%(\u\l\)\@=\)\|\(\a\A\@=\)\)'
+  let pat =
+        \   a:motion ==# 'w' || a:motion ==# 'b'  ? wiw_head
+        \ : a:motion ==# 'e' || a:motion ==# 'ge' ? wiw_tail
+        \ : wiw_head
+  for i in range(cnt)
+    let isMoved = search(pat, (moveForward ? '' : 'b') . 'W') > 0
+    if !isMoved | break | endif
+  endfor
+endfunction " }}}
+
 function! smartmove#home(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
