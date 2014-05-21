@@ -110,7 +110,6 @@ endfunction " }}}
 function! smartmove#home(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
-  " home
   if c > 1
     silent execute 'normal! h' . (&wrap ? 'g^' : '^')
     if col('.') == c
@@ -123,7 +122,6 @@ endfunction " }}}
 function! smartmove#end(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
-  " end
   if c < col('$') - 1
     silent execute 'normal! l' . (&wrap ? 'g$' : '$')
   else
