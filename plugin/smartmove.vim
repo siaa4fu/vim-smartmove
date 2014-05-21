@@ -37,6 +37,25 @@ inoremap <silent> <Plug>(smartmove-word-e)  <C-o>:<C-u>call smartmove#word('e', 
 inoremap <silent> <Plug>(smartmove-word-ge) <C-o>:<C-u>call smartmove#word('ge', 'i')<CR>
 " }}}
 
+" wiw-motions {{{
+nnoremap <silent> <Plug>(smartmove-wiw-w)  :<C-u>call smartmove#wiw('w', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-wiw-b)  :<C-u>call smartmove#wiw('b', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-wiw-e)  :<C-u>call smartmove#wiw('e', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-wiw-ge) :<C-u>call smartmove#wiw('ge', 'n')<CR>
+xnoremap <silent> <Plug>(smartmove-wiw-w)  :<C-u>call smartmove#wiw('w', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-wiw-b)  :<C-u>call smartmove#wiw('b', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-wiw-e)  :<C-u>call smartmove#wiw('e', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-wiw-ge) :<C-u>call smartmove#wiw('ge', 'x')<CR>
+onoremap <silent> <Plug>(smartmove-wiw-w)  :<C-u>call smartmove#wiw('w', 'o')<CR>
+onoremap <silent> <Plug>(smartmove-wiw-b)  :<C-u>call smartmove#wiw('b', 'o')<CR>
+onoremap <silent> <Plug>(smartmove-wiw-e)  :<C-u>call smartmove#wiw('e', 'o')<CR>
+onoremap <silent> <Plug>(smartmove-wiw-ge) :<C-u>call smartmove#wiw('ge', 'o')<CR>
+inoremap <silent> <Plug>(smartmove-wiw-w)  <C-o>:<C-u>call smartmove#wiw('w', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-wiw-b)  <C-o>:<C-u>call smartmove#wiw('b', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-wiw-e)  <C-o>:<C-u>call smartmove#wiw('e', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-wiw-ge) <C-o>:<C-u>call smartmove#wiw('ge', 'i')<CR>
+" }}}
+
 " left-right-motions {{{
 nnoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#homeend(1, 'n')<CR>
 nnoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#homeend(0, 'n')<CR>
