@@ -38,14 +38,14 @@ inoremap <silent> <Plug>(smartmove-word-ge) <C-o>:<C-u>call smartmove#word('ge',
 " }}}
 
 " left-right-motions {{{
-nnoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#homeend(1, 'n')<CR>
-nnoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#homeend(0, 'n')<CR>
-xnoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#homeend(1, 'x')<CR>
-xnoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#homeend(0, 'x')<CR>
-onoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#homeend(1, 'o')<CR>
-onoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#homeend(0, 'o')<CR>
-inoremap <silent> <Plug>(smartmove-home) <C-o>:<C-u>call smartmove#homeend(1, 'i')<CR>
-inoremap <silent> <Plug>(smartmove-end)  <C-o>:<C-u>call smartmove#homeend(0, 'i')<CR>
+nnoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#home('n')<CR>
+nnoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#end('n')<CR>
+xnoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#home('x')<CR>
+xnoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#end('x')<CR>
+onoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#home('o')<CR>
+onoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#end('o')<CR>
+inoremap <silent> <Plug>(smartmove-home) <C-o>:<C-u>call smartmove#home('i')<CR>
+inoremap <silent> <Plug>(smartmove-end)  <C-o>:<C-u>call smartmove#end('i')<CR>
 " }}}
 
 " up-down-motions {{{

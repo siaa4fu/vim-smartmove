@@ -107,24 +107,27 @@ function! smartmove#word(motion, mode) " {{{
   endfor
 endfunction " }}}
 
-function! smartmove#homeend(isHome, mode) " {{{
+function! smartmove#home(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
-  if a:isHome
-    if c > 1
-      silent execute 'normal! h' . (&wrap ? 'g^' : '^')
-      if col('.') == c
-        silent execute 'normal!' . (&wrap ? 'g0' : '0')
-      endif
-    else
-      normal! ^
+  " home
+  if c > 1
+    silent execute 'normal! h' . (&wrap ? 'g^' : '^')
+    if col('.') == c
+      silent execute 'normal!' . (&wrap ? 'g0' : '0')
     endif
   else
-    if c < col('$') - 1
-      silent execute 'normal! l' . (&wrap ? 'g$' : '$')
-    else
-      normal! g_
-    endif
+    normal! ^
+  endif
+endfunction " }}}
+function! smartmove#end(mode) " {{{
+  call s:precmd(a:mode, 1)
+  let c = col('.')
+  " end
+  if c < col('$') - 1
+    silent execute 'normal! l' . (&wrap ? 'g$' : '$')
+  else
+    normal! g_
   endif
 endfunction " }}}
 
