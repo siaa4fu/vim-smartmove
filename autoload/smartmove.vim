@@ -200,7 +200,8 @@ function! smartmove#searchjump(motion, mode) " {{{
   \ ) && startline != endline
     normal! zz
   endif
-  call feedkeys(":\<C-u>set hlsearch | echo\<CR>", 'n')
+  call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>", 
+        \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
 endfunction " }}}
 
 function! smartmove#patsearch(pat, ...) " {{{
@@ -209,7 +210,8 @@ function! smartmove#patsearch(pat, ...) " {{{
   " v:searchforward is restored when returning from a function
   call feedkeys(":\<C-u>let v:searchforward = " . v:searchforward . " | echo\<CR>", 'n')
   if g:smartmove_no_jump_search
-    call feedkeys(":\<C-u>set hlsearch | echo\<CR>", 'n')
+    call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>", 
+          \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
   else
     call feedkeys("\<Plug>(smartmove-searchjump-n)", 'm')
   endif
