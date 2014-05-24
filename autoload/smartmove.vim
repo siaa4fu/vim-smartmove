@@ -14,14 +14,14 @@ function! s:precmd(mode, o_v) " {{{
     normal! v
   endif
 endfunction " }}}
-function! s:skipClosedFold(moveForward) " {{{
+function! s:skipClosedFold(moveforward) " {{{
   let l = line('.')
-  if a:moveForward && foldclosedend(l) > -1
+  if a:moveforward && foldclosedend(l) > -1
     " move forward to the last line in a closed fold
     let l = foldclosedend(l)
     call cursor(l, col([l, '$']))
     return 1
-  elseif !a:moveForward && foldclosed(l) > -1
+  elseif !a:moveforward && foldclosed(l) > -1
     " move backward to the first line in a closed fold
     let l = foldclosed(l)
     call cursor(l, 1)
@@ -46,14 +46,14 @@ endfunction " }}}
 
 function! smartmove#word(motion, mode) " {{{
   let cnt = v:count1
-  let moveForward =
+  let moveforward =
         \   a:motion ==# 'w' || a:motion ==# 'e'  ? 1
         \ : a:motion ==# 'b' || a:motion ==# 'ge' ? 0
         \ : 1
   call s:precmd(a:mode,
         \ a:motion ==# 'e' || a:motion ==# 'ge')
   for i in range(cnt)
-    let isEOL = s:skipClosedFold(moveForward)
+    let isEOL = s:skipClosedFold(moveforward)
     let l = line('.')
     if isEOL < 0
       " 現在の位置が行末かどうかを判定
@@ -69,7 +69,7 @@ function! smartmove#word(motion, mode) " {{{
     let _c = col('.')
     if l == _l
       " 移動後も同じ行なので終了
-    elseif moveForward
+    elseif moveforward
       if isEOL == 0
         " 同じ行の行末に移動
         call cursor(l, col([l, '$']))
@@ -86,7 +86,7 @@ function! smartmove#word(motion, mode) " {{{
           call cursor(_l, _c)
         endif
       endif
-    elseif !moveForward
+    elseif !moveforward
       if l - _l > 1
         if prevnonblank(l - 1) > _l
           " 前の空行ではない行に移動 (b, ge は、それぞれ行頭、行末)
@@ -105,7 +105,7 @@ function! smartmove#word(motion, mode) " {{{
 endfunction " }}}
 function! smartmove#wiw(motion, mode) " {{{
   let cnt = v:count1
-  let moveForward =
+  let moveforward =
         \   a:motion ==# 'w' || a:motion ==# 'e'  ? 1
         \ : a:motion ==# 'b' || a:motion ==# 'ge' ? 0
         \ : 1
@@ -119,7 +119,7 @@ function! smartmove#wiw(motion, mode) " {{{
         \ : a:motion ==# 'e' || a:motion ==# 'ge' ? wiw_tail
         \ : wiw_head
   for i in range(cnt)
-    let isMoved = search(pat, (moveForward ? '' : 'b') . 'W') > 0
+    let isMoved = search(pat, (moveforward ? '' : 'b') . 'W') > 0
     if !isMoved | break | endif
   endfor
 endfunction " }}}
@@ -148,7 +148,7 @@ endfunction " }}}
 
 function! smartmove#smoothscroll(motion, mode) " {{{
   let cnt = v:count1
-  let scrollForward =
+  let scrollforward =
         \   a:motion ==# 'f' || a:motion ==# 'd' ? 1
         \ : a:motion ==# 'b' || a:motion ==# 'u' ? 0
         \ : 1
@@ -158,7 +158,7 @@ function! smartmove#smoothscroll(motion, mode) " {{{
         \ : 2
   call s:precmd(a:mode, 1)
   let n = (winheight(0) / 2) * cnt * unit
-  if scrollForward
+  if scrollforward
     let n = min([n, line('$') - line('w$')])
     let key = line('.') == line('w$') ? "\<C-e>j" : "j\<C-e>"
   else
@@ -191,13 +191,13 @@ endfunction " }}}
 " }}}
 function! smartmove#searchjump(motion, mode) " {{{
   let cnt = v:count1
-  let moveForward =
+  let moveforward =
         \ a:motion ==# (v:searchforward ? 'n' : 'N')
   call s:precmd(a:mode, 0)
   let startline = line('.')
   try
     for i in range(cnt)
-      call s:skipClosedFold(moveForward)
+      call s:skipClosedFold(moveforward)
       call s:exeMotion(a:motion, a:mode)
     endfor
   catch /^Vim\%((\a\+)\)\=:E486/
@@ -205,8 +205,8 @@ function! smartmove#searchjump(motion, mode) " {{{
     return
   endtry
   let endline = line('.')
-  if ((moveForward && line('.') == line('w$'))
-  \ || (!moveForward && line('.') == line('w0'))
+  if ((moveforward && line('.') == line('w$'))
+  \ || (!moveforward && line('.') == line('w0'))
   \ ) && startline != endline
     normal! zz
   endif
