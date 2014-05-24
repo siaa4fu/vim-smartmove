@@ -16,7 +16,7 @@ set cpo&vim
 " *, #, g* and g# commands use n command
 let g:smartmove_motions = get(g:, 'smartmove_motions', {})
 " scroll speed (non-negative integer)
-let g:scroll_speed = get(g:, 'smartmove_scroll_speed', 1)
+let g:smartmove_scroll_speed = get(g:, 'smartmove_scroll_speed', 1)
 " make *, #, g* and g# commands stay on a current word
 let g:smartmove_no_jump_search = get(g:, 'smartmove_no_jump_search', 0)
 
