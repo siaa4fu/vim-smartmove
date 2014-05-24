@@ -192,7 +192,7 @@ function! smartmove#searchjump(motion, mode) " {{{
     endfor
   catch /^Vim\%((\a\+)\)\=:E486/
     echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
-    return &hlsearch
+    return
   endtry
   let endline = line('.')
   if ((moveForward && line('.') == line('w$'))
@@ -200,14 +200,14 @@ function! smartmove#searchjump(motion, mode) " {{{
   \ ) && startline != endline
     normal! zz
   endif
-  return 1
+  call feedkeys(":\<C-u>set hlsearch | echo\<CR>", 'n')
 endfunction " }}}
 
 function! smartmove#patsearch(pat, ...) " {{{
   let @/ = a:pat
   call histadd('/', a:pat)
-  let v:searchforward = get(a:, 1, 1)
-  " if a mapping is still being executed, characters in feedkeys() come after them
+  " v:searchforward is restored when returning from a function
+  call feedkeys(":\<C-u>let v:searchforward = " . v:searchforward . " | echo\<CR>", 'n')
   if g:smartmove_no_jump_search
     call feedkeys(":\<C-u>set hlsearch | echo\<CR>", 'n')
   else
@@ -236,13 +236,11 @@ function! smartmove#starsearch(motion, mode) " {{{
   if a:motion ==# '*' || a:motion ==# '#'
     let pat = '\<' . pat . '\>'
   endif
-  " v:searchforward is restored when returning from a function
   let v:searchforward =
         \   a:motion ==# '*' || a:motion ==# 'g*' ? 1
         \ : a:motion ==# '#' || a:motion ==# 'g#' ? 0
         \ : v:searchforward
   call smartmove#patsearch('\V' . pat, v:searchforward)
-  return v:searchforward
 endfunction " }}}
 
 let &cpo = s:save_cpo

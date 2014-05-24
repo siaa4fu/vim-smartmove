@@ -85,22 +85,22 @@ inoremap <silent> <Plug>(smartmove-smoothscroll-u) <C-o>:<C-u>call smartmove#smo
 " }}}
 
 " search-motions {{{
-nnoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>let &hlsearch = smartmove#searchjump('n', 'n')<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>let &hlsearch = smartmove#searchjump('N', 'n')<CR>
-xnoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>let &hlsearch = smartmove#searchjump('n', 'x')<CR>
-xnoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>let &hlsearch = smartmove#searchjump('N', 'x')<CR>
-onoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>let &hlsearch = smartmove#searchjump('n', 'o')<CR>
-onoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>let &hlsearch = smartmove#searchjump('N', 'o')<CR>
-inoremap <silent> <Plug>(smartmove-searchjump-n)  <C-o>:<C-u>let &hlsearch = smartmove#searchjump('n', 'i')<CR>
-inoremap <silent> <Plug>(smartmove-searchjump-N)  <C-o>:<C-u>let &hlsearch = smartmove#searchjump('N', 'i')<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-*)  :<C-u>let v:searchforward = smartmove#starsearch('*' , 'n')<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-#)  :<C-u>let v:searchforward = smartmove#starsearch('#' , 'n')<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-g*) :<C-u>let v:searchforward = smartmove#starsearch('g*', 'n')<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-g#) :<C-u>let v:searchforward = smartmove#starsearch('g#', 'n')<CR>
-xnoremap <silent> <Plug>(smartmove-searchjump-*)  :<C-u>let v:searchforward = smartmove#starsearch('*' , 'x')<CR>
-xnoremap <silent> <Plug>(smartmove-searchjump-#)  :<C-u>let v:searchforward = smartmove#starsearch('#' , 'x')<CR>
-xnoremap <silent> <Plug>(smartmove-searchjump-g*) :<C-u>let v:searchforward = smartmove#starsearch('g*', 'x')<CR>
-xnoremap <silent> <Plug>(smartmove-searchjump-g#) :<C-u>let v:searchforward = smartmove#starsearch('g#', 'x')<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>call smartmove#searchjump('n', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>call smartmove#searchjump('N', 'n')<CR>
+xnoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>call smartmove#searchjump('n', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>call smartmove#searchjump('N', 'x')<CR>
+onoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>call smartmove#searchjump('n', 'o')<CR>
+onoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>call smartmove#searchjump('N', 'o')<CR>
+inoremap <silent> <Plug>(smartmove-searchjump-n)  <C-o>:<C-u>call smartmove#searchjump('n', 'i')<CR>
+inoremap <silent> <Plug>(smartmove-searchjump-N)  <C-o>:<C-u>call smartmove#searchjump('N', 'i')<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-*)  :<C-u>call smartmove#starsearch('*' , 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-#)  :<C-u>call smartmove#starsearch('#' , 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-g*) :<C-u>call smartmove#starsearch('g*', 'n')<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-g#) :<C-u>call smartmove#starsearch('g#', 'n')<CR>
+xnoremap <silent> <Plug>(smartmove-searchjump-*)  :<C-u>call smartmove#starsearch('*' , 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-searchjump-#)  :<C-u>call smartmove#starsearch('#' , 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-searchjump-g*) :<C-u>call smartmove#starsearch('g*', 'x')<CR>
+xnoremap <silent> <Plug>(smartmove-searchjump-g#) :<C-u>call smartmove#starsearch('g#', 'x')<CR>
 " }}}
 
 let &cpo = s:save_cpo
