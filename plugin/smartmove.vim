@@ -15,9 +15,9 @@ set cpo&vim
 " motions are used instead of w, b, e, ge, n and N commands
 " *, #, g* and g# commands use n command
 let g:smartmove_motions = get(g:, 'smartmove_motions', {})
-" scroll speed (non-negative integer)
+" smooth scroll speed (non-negative integer)
 let g:smartmove_scroll_speed = get(g:, 'smartmove_scroll_speed', 1)
-" set the 'hlsearch' option to new value when search commands is used
+" set the 'hlsearch' option to new value when using search commands
 let g:smartmove_set_hlsearch = get(g:, 'smartmove_set_hlsearch', 0)
 " make *, #, g* and g# commands stay on a current word
 let g:smartmove_no_jump_search = get(g:, 'smartmove_no_jump_search', 0)
