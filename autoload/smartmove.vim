@@ -14,7 +14,6 @@ function! s:precmd(mode, o_v) " {{{
     normal! v
   endif
 endfunction " }}}
-
 function! s:skipClosedFold(moveForward) " {{{
   let l = line('.')
   if a:moveForward && foldclosedend(l) > -1
@@ -30,14 +29,12 @@ function! s:skipClosedFold(moveForward) " {{{
   endif
   return -1
 endfunction " }}}
-
-" ref. kana/vim-arpeggio
 function! s:unescape_lhs(escaped_lhs) " {{{
+  " ref. kana/vim-arpeggio
   let keys = split(a:escaped_lhs, '\(<[^<>]\+>\|.\)\zs')
   call map(keys, 'v:val =~ "^<.*>$" ? eval(''"\'' . v:val . ''"'') : v:val')
   return join(keys, '')
 endfunction " }}}
-
 function! s:exeMotion(motion, mode) " {{{
   if has_key(g:smartmove_motions, a:motion)
   \ && !empty(maparg(g:smartmove_motions[a:motion], a:mode))
@@ -106,7 +103,6 @@ function! smartmove#word(motion, mode) " {{{
     endif
   endfor
 endfunction " }}}
-
 function! smartmove#wiw(motion, mode) " {{{
   let cnt = v:count1
   let moveForward =
@@ -203,7 +199,6 @@ function! smartmove#searchjump(motion, mode) " {{{
   call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>", 
         \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
 endfunction " }}}
-
 function! smartmove#patsearch(pat, ...) " {{{
   let @/ = a:pat
   call histadd('/', a:pat)
@@ -216,7 +211,6 @@ function! smartmove#patsearch(pat, ...) " {{{
     call feedkeys("\<Plug>(smartmove-searchjump-n)", 'm')
   endif
 endfunction " }}}
-
 function! s:getSelection() " {{{
   let save_regs = [
   \ [getreg('v', 1), getregtype('v')],
@@ -230,7 +224,6 @@ function! s:getSelection() " {{{
     call setreg('"', save_regs[1][0], save_regs[1][1])
   endtry
 endfunction " }}}
-
 function! smartmove#starsearch(motion, mode) " {{{
   let pat = substitute(escape(
   \ a:mode == 'x' ? s:getSelection() : expand('<cword>'),

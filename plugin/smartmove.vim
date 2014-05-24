@@ -40,7 +40,6 @@ inoremap <silent> <Plug>(smartmove-word-b)  <C-o>:<C-u>call smartmove#word('b', 
 inoremap <silent> <Plug>(smartmove-word-e)  <C-o>:<C-u>call smartmove#word('e', 'i')<CR>
 inoremap <silent> <Plug>(smartmove-word-ge) <C-o>:<C-u>call smartmove#word('ge', 'i')<CR>
 " }}}
-
 " wiw-motions {{{
 nnoremap <silent> <Plug>(smartmove-wiw-w)  :<C-u>call smartmove#wiw('w', 'n')<CR>
 nnoremap <silent> <Plug>(smartmove-wiw-b)  :<C-u>call smartmove#wiw('b', 'n')<CR>
@@ -59,7 +58,6 @@ inoremap <silent> <Plug>(smartmove-wiw-b)  <C-o>:<C-u>call smartmove#wiw('b', 'i
 inoremap <silent> <Plug>(smartmove-wiw-e)  <C-o>:<C-u>call smartmove#wiw('e', 'i')<CR>
 inoremap <silent> <Plug>(smartmove-wiw-ge) <C-o>:<C-u>call smartmove#wiw('ge', 'i')<CR>
 " }}}
-
 " left-right-motions {{{
 nnoremap <silent> <Plug>(smartmove-home) :<C-u>call smartmove#home('n')<CR>
 nnoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#end('n')<CR>
@@ -70,7 +68,6 @@ onoremap <silent> <Plug>(smartmove-end)  :<C-u>call smartmove#end('o')<CR>
 inoremap <silent> <Plug>(smartmove-home) <C-o>:<C-u>call smartmove#home('i')<CR>
 inoremap <silent> <Plug>(smartmove-end)  <C-o>:<C-u>call smartmove#end('i')<CR>
 " }}}
-
 " up-down-motions {{{
 nnoremap <silent> <Plug>(smartmove-smoothscroll-f) :<C-u>call smartmove#smoothscroll('f', 'n')<CR>
 nnoremap <silent> <Plug>(smartmove-smoothscroll-b) :<C-u>call smartmove#smoothscroll('b', 'n')<CR>
@@ -85,7 +82,6 @@ inoremap <silent> <Plug>(smartmove-smoothscroll-b) <C-o>:<C-u>call smartmove#smo
 inoremap <silent> <Plug>(smartmove-smoothscroll-d) <C-o>:<C-u>call smartmove#smoothscroll('d', 'i')<CR>
 inoremap <silent> <Plug>(smartmove-smoothscroll-u) <C-o>:<C-u>call smartmove#smoothscroll('u', 'i')<CR>
 " }}}
-
 " search-motions {{{
 nnoremap <silent> <Plug>(smartmove-searchjump-n)  :<C-u>call smartmove#searchjump('n', 'n')<CR>
 nnoremap <silent> <Plug>(smartmove-searchjump-N)  :<C-u>call smartmove#searchjump('N', 'n')<CR>
