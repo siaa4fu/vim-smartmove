@@ -175,6 +175,20 @@ function! smartmove#smoothscroll(motion, mode) " {{{
   endwhile
 endfunction " }}}
 
+" 検索パターンの強調表示について {{{
+" 'hlsearch' = オプション
+"   強調表示の有効、無効
+" :nohlsearch = コマンド
+"   強調表示を一時的に無効 (オプション値を変更しない)
+"   検索コマンドを使うか、 'hlsearch' のオンで再び強調表示される
+" v:hlsearch = 変数
+"   実際に強調表示が行われているかを決定する変数
+"   0, 1 に設定することは、それぞれ :nohlsearch と let &hlsearch = &hlsearch と同様に働く
+" つまり、まとめると以下のようになる
+"   'hlsearch' のとき有効、 :nohlsearch により一時的に無効、検索で再度有効
+"   'nohlsearch' のとき :nohlsearch に関わらず常に無効、再検索でも無効
+" このプラグインでは設定で有効にしたときのみ、検索コマンド、パターン検索時に 'hlsearch' を弄る
+" }}}
 function! smartmove#searchjump(motion, mode) " {{{
   let cnt = v:count1
   let moveForward =
