@@ -200,10 +200,11 @@ function! smartmove#searchjump(motion, mode) " {{{
         \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
 endfunction " }}}
 function! smartmove#patsearch(pat, ...) " {{{
+  " v:searchforward is reset to forward
   let @/ = a:pat
   call histadd('/', a:pat)
   " v:searchforward is restored when returning from a function
-  call feedkeys(":\<C-u>let v:searchforward = " . v:searchforward . " | echo\<CR>", 'n')
+  call feedkeys(":\<C-u>let v:searchforward = " . get(a:, 1, v:searchforward) . " | echo\<CR>", 'n')
   if g:smartmove_no_jump_search
     call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>", 
           \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
@@ -231,11 +232,11 @@ function! smartmove#starsearch(motion, mode) " {{{
   if a:motion ==# '*' || a:motion ==# '#'
     let pat = '\<' . pat . '\>'
   endif
-  let v:searchforward =
+  let searchforward =
         \   a:motion ==# '*' || a:motion ==# 'g*' ? 1
         \ : a:motion ==# '#' || a:motion ==# 'g#' ? 0
         \ : v:searchforward
-  call smartmove#patsearch('\V' . pat, v:searchforward)
+  call smartmove#patsearch('\V' . pat, searchforward)
 endfunction " }}}
 
 let &cpo = s:save_cpo
