@@ -1,4 +1,4 @@
-" File:        autoload/smartmove/search.vim
+" File:        autoload/smartmove/patsearch.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
 
@@ -7,10 +7,10 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! smartmove#search#init_hlsearch_mapping()
-  if g:smartmove_search_leader_key == '' | return | endif
+function! smartmove#patsearch#init_hlsearch_mapping()
+  if g:smartmove_patsearch_leader_key == '' | return | endif
   execute 'nnoremap <silent>'
-        \ g:smartmove_search_leader_key . '<CR>'
+        \ g:smartmove_patsearch_leader_key . '<CR>'
         \ ':<C-u>set hlsearch!<CR>'
 endfunction
 
@@ -79,8 +79,8 @@ let s:pats = {
 \ 'ordered-lists'              : [ '\^\d\+\[.\uff0e] \?'               , 0 ],
 \}
 " }}}
-function! smartmove#search#init_mappings(do_mappings, motions)
-  if ! a:do_mappings || g:smartmove_search_leader_key == '' | return | endif
+function! smartmove#patsearch#init_mappings(do_mappings, motions)
+  if ! a:do_mappings || g:smartmove_patsearch_leader_key == '' | return | endif
   for [name, keys] in items(a:motions)
     if ! has_key(s:pats, name) | continue | endif
     let isSurrounded = s:pats[name][-1]
@@ -95,14 +95,14 @@ function! smartmove#search#init_mappings(do_mappings, motions)
     \]
     for lhs in keys
       execute 'nnoremap <silent>'
-            \ g:smartmove_search_leader_key . lhs
+            \ g:smartmove_patsearch_leader_key . lhs
             \ ':<C-u>call smartmove#patsearch(''' . pats[0] . ''')<CR>'
       if ! isSurrounded | continue | endif
       execute 'nnoremap <silent>'
-            \ g:smartmove_search_leader_key . 'a' . lhs
+            \ g:smartmove_patsearch_leader_key . 'a' . lhs
             \ ':<C-u>call smartmove#patsearch(''' . pats[1] . ''')<CR>'
       execute 'nnoremap <silent>'
-            \ g:smartmove_search_leader_key . 'i' . lhs
+            \ g:smartmove_patsearch_leader_key . 'i' . lhs
             \ ':<C-u>call smartmove#patsearch(''' . pats[2] . ''')<CR>'
     endfor
   endfor

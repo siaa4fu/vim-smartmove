@@ -1,37 +1,37 @@
-" File:        plugin/smartmove/search.vim
+" File:        plugin/smartmove/patsearch.vim
 " Author:      sima (TwitterID: sima_fu)
 " Namespace:   http://f-u.seesaa.net/
 
 scriptencoding utf-8
 
-if exists('g:loaded_smartmove_search')
+if exists('g:loaded_smartmove_patsearch')
   finish
 endif
-let g:loaded_smartmove_search = 1
+let g:loaded_smartmove_patsearch = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:do_mappings = get(g:, 'smartmove_search_do_mappings', {})
+let s:do_mappings = get(g:, 'smartmove_patsearch_do_mappings', {})
 for s:kind in ['hlsearch', 'braces', 'jabraces', 'codes', 'jacodes', 'specialpats']
   if ! has_key(s:do_mappings, s:kind) || s:do_mappings[s:kind] != 0
     let s:do_mappings[s:kind] = 1
   endif
 endfor
-let g:smartmove_search_leader_key = get(g:, 'smartmove_search_leader_key', '')
+let g:smartmove_patsearch_leader_key = get(g:, 'smartmove_patsearch_leader_key', '')
 
 if s:do_mappings.hlsearch
-  call smartmove#search#init_hlsearch_mapping()
+  call smartmove#patsearch#init_hlsearch_mapping()
 endif
 
-call smartmove#search#init_mappings(s:do_mappings.braces, {
+call smartmove#patsearch#init_mappings(s:do_mappings.braces, {
 \ 'parens'  : ['b', '(', ')'],
 \ 'brackets': ['B', '{', '}'],
 \ 'braces'  : ['r', '[', ']'],
 \ 'angles'  : ['a', '<', '>'],
 \})
 
-call smartmove#search#init_mappings(s:do_mappings.jabraces, {
+call smartmove#patsearch#init_mappings(s:do_mappings.jabraces, {
 \ 'jabraces-parens'           : ['jb', 'j(', 'j)'],
 \ 'jabraces-brackets'         : ['jB', 'j{', 'j}'],
 \ 'jabraces-braces'           : ['jr', 'j[', 'j]'],
@@ -45,7 +45,7 @@ call smartmove#search#init_mappings(s:do_mappings.jabraces, {
 \ 'jabraces-sumi-kakko'       : ['js'],
 \})
 
-call smartmove#search#init_mappings(s:do_mappings.codes, {
+call smartmove#patsearch#init_mappings(s:do_mappings.codes, {
 \ 'spaces'           : ['<Space>', 's'],
 \ 'tabs'             : ['<Tab>', 't'],
 \ 'blanks'           : ['S', 'T'],
@@ -77,7 +77,7 @@ call smartmove#search#init_mappings(s:do_mappings.codes, {
 \ 'underscores'      : ['_'],
 \})
 
-call smartmove#search#init_mappings(s:do_mappings.jacodes, {
+call smartmove#patsearch#init_mappings(s:do_mappings.jacodes, {
 \ 'jacodes'              : ['zz'],
 \ 'jacodes-digits'       : ['zd'],
 \ 'jacodes-alphas'       : ['za'],
@@ -92,7 +92,7 @@ call smartmove#search#init_mappings(s:do_mappings.jacodes, {
 \ 'jacodes-slashs'       : ['j/'],
 \})
 
-call smartmove#search#init_mappings(s:do_mappings.specialpats, {
+call smartmove#patsearch#init_mappings(s:do_mappings.specialpats, {
 \ 'ordered-lists': ['o'],
 \})
 
