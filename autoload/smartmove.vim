@@ -236,13 +236,12 @@ function! smartmove#searchjump(motion, mode, ...) " {{{
   endif
 endfunction " }}}
 function! smartmove#patsearch(pat, ...) " {{{
-  " v:searchforward is reset to forward
-  let @/ = a:pat
+  let @/ = a:pat " v:searchforward is reset to forward
   call histadd('/', a:pat)
   " v:searchforward is restored when returning from a function
   call feedkeys(":\<C-u>let v:searchforward = " . get(a:, 1, v:searchforward) . " | echo\<CR>", 'n')
   if g:smartmove_no_jump_search
-    call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>", 
+    call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>",
           \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
   else
     call feedkeys("\<Plug>(smartmove-searchjump-n)", 'm')
