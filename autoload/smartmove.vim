@@ -35,13 +35,20 @@ function! s:unescape_lhs(escaped_lhs) " {{{
   call map(keys, 'v:val =~ "^<.*>$" ? eval(''"\'' . v:val . ''"'') : v:val')
   return join(keys, '')
 endfunction " }}}
-function! s:exeMotion(motion, mode) " {{{
+function! s:exeMotion(motion, mode, usesFeedkeysCmd) " {{{
   if has_key(g:smartmove_motions, a:motion)
   \ && !empty(maparg(g:smartmove_motions[a:motion], a:mode))
-    execute 'normal' s:unescape_lhs(g:smartmove_motions[a:motion])
+    if a:usesFeedkeysCmd
+      call feedkeys((a:mode ==# 'i' ? "\<C-o>" : '')
+            \. s:unescape_lhs(g:smartmove_motions[a:motion]), 'm')
+      return 1
+    else
+      execute 'normal' s:unescape_lhs(g:smartmove_motions[a:motion])
+    endif
   else
     silent execute 'normal!' a:motion
   endif
+  return 0
 endfunction " }}}
 
 function! smartmove#word(motion, mode) " {{{
@@ -64,7 +71,7 @@ function! smartmove#word(motion, mode) " {{{
       call cursor(l, c)
     endif
     " 単語移動
-    call s:exeMotion(a:motion, a:mode)
+    call s:exeMotion(a:motion, a:mode, 0)
     let _l = line('.')
     let _c = col('.')
     if l == _l
@@ -189,29 +196,44 @@ endfunction " }}}
 "   'nohlsearch' のとき :nohlsearch に関わらず常に無効、再検索でも無効
 " このプラグインでは設定で有効にしたときのみ、検索コマンド、パターン検索時に 'hlsearch' を弄る
 " }}}
-function! smartmove#searchjump(motion, mode) " {{{
-  let cnt = v:count1
-  let moveforward =
-        \ a:motion ==# (v:searchforward ? 'n' : 'N')
-  call s:precmd(a:mode, 0)
-  let startline = line('.')
-  try
-    for i in range(cnt)
+function! smartmove#searchjump(motion, mode, ...) " {{{
+  " NOTE: cmdheight が小さいとき、 feedkeys() が長いといちいちメッセージが出る (hit-enter)
+  if !has_key(a:, 1)
+    " 1. highlight all search pattern matches -> 2.
+    return feedkeys(printf("%s:\<C-u>let %s = 1 | call smartmove#searchjump('%s', '%s', %s) | echo\<CR>",
+          \ a:mode ==# 'i' ? "\<C-o>" : '',
+          \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch',
+          \ a:motion,
+          \ a:mode,
+          \ v:count1
+          \), 'n')
+  elseif a:1 > 0
+    " 2. move to the previous/next matches
+    let moveforward =
+          \ a:motion ==# (v:searchforward ? 'n' : 'N')
+    call s:precmd(a:mode, 0)
+    let lnum_when_starting = line('.')
+    try
+      for i in range(a:1 - 1)
+        call s:skipClosedFold(moveforward)
+        call s:exeMotion(a:motion, a:mode, 0)
+      endfor
+      " 代替マップが設定されているなら、最後の1回を feedkeys() で実行し処理を終える
       call s:skipClosedFold(moveforward)
-      call s:exeMotion(a:motion, a:mode)
-    endfor
-  catch /^Vim\%((\a\+)\)\=:E486/
-    echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
-    return
-  endtry
-  let endline = line('.')
-  if ((moveforward && line('.') == line('w$'))
-  \ || (!moveforward && line('.') == line('w0'))
-  \ ) && startline != endline
+      let isExedByFeedkeys = s:exeMotion(a:motion, a:mode, 1)
+      if isExedByFeedkeys | return | endif
+    catch /^Vim\%((\a\+)\)\=:E486/
+      echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
+      return
+    endtry
+  endif
+  " 3. smart 'zz' command
+  let current_lnum = line('.')
+  if ((moveforward && current_lnum == line('w$'))
+  \ || (!moveforward && current_lnum == line('w0'))
+  \ ) && lnum_when_starting != current_lnum
     normal! zz
   endif
-  call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>", 
-        \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
 endfunction " }}}
 function! smartmove#patsearch(pat, ...) " {{{
   " v:searchforward is reset to forward
