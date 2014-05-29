@@ -7,11 +7,25 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! s:SID_prefix() " {{{
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_prefix$')
+endfunction " }}}
 function! s:unescape_lhs(escaped_lhs) " {{{
   " ref. kana/vim-arpeggio
   let keys = split(a:escaped_lhs, '\(<[^<>]\+>\|.\)\zs')
   call map(keys, 'v:val =~ "^<.*>$" ? eval(''"\'' . v:val . ''"'') : v:val')
   return join(keys, '')
+endfunction " }}}
+function! s:silentFeedkeys(rhs, ...) " {{{
+  " feedkeys() の内容を表示させずに実行する
+  " また 'cmdheight' が小さいとき、内容が長いとメッセージが出る (hit-enter) が、それを回避する
+  let remapsKeys = get(a:, 1, 'm') ==# 'm' " 't' には対応しない
+  execute 'n' . (remapsKeys ? '' : 'nore') . 'map <silent>'
+        \ '<SID>(smartmove-inner-feedkeys)'
+        \ a:rhs
+  let isMapmodeI = get(a:, 2, 'n') ==# 'i'
+  call feedkeys((isMapmodeI ? "\<C-o>" : '')
+        \. s:unescape_lhs(s:SID_prefix() . '(smartmove-inner-feedkeys)'), 'm')
 endfunction " }}}
 
 function! s:precmd(mode, o_v) " {{{
@@ -39,9 +53,8 @@ endfunction " }}}
 function! s:exeMotion(motion, mode, usesFeedkeysCmd) " {{{
   if has_key(g:smartmove_motions, a:motion)
   \ && !empty(maparg(g:smartmove_motions[a:motion], a:mode))
-    if a:usesFeedkeysCmd && a:mode !=# 'o'
-      call feedkeys((a:mode ==# 'i' ? "\<C-o>" : '')
-            \. s:unescape_lhs(g:smartmove_motions[a:motion]), 'm')
+    if a:usesFeedkeysCmd
+      call s:silentFeedkeys(g:smartmove_motions[a:motion], 'm', a:mode)
     else
       execute 'normal' s:unescape_lhs(g:smartmove_motions[a:motion])
     endif
@@ -196,16 +209,14 @@ endfunction " }}}
 " このプラグインでは設定で有効にしたときのみ、検索コマンド、パターン検索時に 'hlsearch' を弄る
 " }}}
 function! smartmove#searchjump(motion, mode, ...) " {{{
-  " NOTE: cmdheight が小さいとき、 feedkeys() が長いといちいちメッセージが出る (hit-enter)
   if !has_key(a:, 1)
     " 1. highlight all search pattern matches -> 2.
-    return feedkeys(printf("%s:\<C-u>let %s = 1 | call smartmove#searchjump('%s', '%s', %s) | echo\<CR>",
-          \ a:mode ==# 'i' ? "\<C-o>" : '',
+    return s:silentFeedkeys(printf(':<C-u>let %s = 1 \| call smartmove#searchjump(''%s'', ''%s'', %s)<CR>',
           \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch',
           \ a:motion,
           \ a:mode,
           \ v:count1
-          \), 'n')
+          \), 'n', a:mode)
   elseif a:1 > 0
     " 2. move to the previous/next matches
     let moveforward =
@@ -261,12 +272,12 @@ function! smartmove#patsearch(pat, ...) " {{{
   let @/ = a:pat " v:searchforward is reset to forward
   call histadd('/', a:pat)
   " v:searchforward is restored when returning from a function
-  call feedkeys(":\<C-u>let v:searchforward = " . get(a:, 1, v:searchforward) . " | echo\<CR>", 'n')
+  call s:silentFeedkeys(':<C-u>let v:searchforward = ' . get(a:, 1, v:searchforward) . '<CR>', 'n')
   if g:smartmove_no_jump_search
-    call feedkeys(printf(":\<C-u>let %s = 1 | echo \<CR>",
+    call s:silentFeedkeys(printf(':<C-u>let %s = 1<CR>',
           \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
   else
-    call feedkeys("\<Plug>(smartmove-searchjump-n)", 'm')
+    call s:silentFeedkeys('<Plug>(smartmove-searchjump-n)', 'm')
   endif
 endfunction " }}}
 function! s:getSelection() " {{{
