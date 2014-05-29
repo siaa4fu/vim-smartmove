@@ -7,6 +7,13 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+function! s:unescape_lhs(escaped_lhs) " {{{
+  " ref. kana/vim-arpeggio
+  let keys = split(a:escaped_lhs, '\(<[^<>]\+>\|.\)\zs')
+  call map(keys, 'v:val =~ "^<.*>$" ? eval(''"\'' . v:val . ''"'') : v:val')
+  return join(keys, '')
+endfunction " }}}
+
 function! s:precmd(mode, o_v) " {{{
   if a:mode ==# 'x'
     normal! gv
@@ -28,12 +35,6 @@ function! s:skipClosedFold(moveforward) " {{{
     return 0
   endif
   return -1
-endfunction " }}}
-function! s:unescape_lhs(escaped_lhs) " {{{
-  " ref. kana/vim-arpeggio
-  let keys = split(a:escaped_lhs, '\(<[^<>]\+>\|.\)\zs')
-  call map(keys, 'v:val =~ "^<.*>$" ? eval(''"\'' . v:val . ''"'') : v:val')
-  return join(keys, '')
 endfunction " }}}
 function! s:exeMotion(motion, mode, usesFeedkeysCmd) " {{{
   if has_key(g:smartmove_motions, a:motion)
@@ -218,8 +219,8 @@ function! smartmove#searchjump(motion, mode, ...) " {{{
       endfor
       " 最後の1回は、代替マップが設定されているなら feedkeys() で実行する
       " feedkeys() の場合、以下のような注意点がある
-      "   実行前にその他の処理は最後まで終わっている
-      "   エラーを補足できない (もちろんエラーの前にその他の処理は終わっている)
+      "   処理キューに入れられるため、実行前にその他の処理は終わっている
+      "   エラーを補足できない (エラーの前にその他の処理は終わっている)
       "   更に feedkeys() を続けると、わざわざ feedkeys() で実行した意味がなくなる
       "     代替マップのエコーや処理待ちなどが消える
       "     同じ feedkeys() の中でコマンドをパイプで続けても同じ
