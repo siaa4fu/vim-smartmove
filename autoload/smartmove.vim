@@ -38,17 +38,15 @@ endfunction " }}}
 function! s:exeMotion(motion, mode, usesFeedkeysCmd) " {{{
   if has_key(g:smartmove_motions, a:motion)
   \ && !empty(maparg(g:smartmove_motions[a:motion], a:mode))
-    if a:usesFeedkeysCmd
+    if a:usesFeedkeysCmd && a:mode !=# 'o'
       call feedkeys((a:mode ==# 'i' ? "\<C-o>" : '')
             \. s:unescape_lhs(g:smartmove_motions[a:motion]), 'm')
-      return 1
     else
       execute 'normal' s:unescape_lhs(g:smartmove_motions[a:motion])
     endif
   else
     silent execute 'normal!' a:motion
   endif
-  return 0
 endfunction " }}}
 
 function! smartmove#word(motion, mode) " {{{
@@ -212,28 +210,51 @@ function! smartmove#searchjump(motion, mode, ...) " {{{
     let moveforward =
           \ a:motion ==# (v:searchforward ? 'n' : 'N')
     call s:precmd(a:mode, 0)
-    let lnum_when_starting = line('.')
+    let s:do_smartzz = [a:1 > 1, moveforward, line('.')]
     try
       for i in range(a:1 - 1)
         call s:skipClosedFold(moveforward)
         call s:exeMotion(a:motion, a:mode, 0)
       endfor
-      " 代替マップが設定されているなら、最後の1回を feedkeys() で実行し処理を終える
+      " 最後の1回は、代替マップが設定されているなら feedkeys() で実行する
+      " feedkeys() の場合、以下のような注意点がある
+      "   実行前にその他の処理は最後まで終わっている
+      "   エラーを補足できない (もちろんエラーの前にその他の処理は終わっている)
+      "   更に feedkeys() を続けると、わざわざ feedkeys() で実行した意味がなくなる
+      "     代替マップのエコーや処理待ちなどが消える
+      "     同じ feedkeys() の中でコマンドをパイプで続けても同じ
       call s:skipClosedFold(moveforward)
-      let isExedByFeedkeys = s:exeMotion(a:motion, a:mode, 1)
-      if isExedByFeedkeys | return | endif
+      call s:exeMotion(a:motion, a:mode, 1)
     catch /^Vim\%((\a\+)\)\=:E486/
       echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
+      if exists('s:do_smartzz') | unlet s:do_smartzz | endif
       return
     endtry
   endif
-  " 3. smart 'zz' command
-  let current_lnum = line('.')
-  if ((moveforward && current_lnum == line('w$'))
-  \ || (!moveforward && current_lnum == line('w0'))
-  \ ) && lnum_when_starting != current_lnum
-    normal! zz
-  endif
+  " 3. smart 'zz' command after the cursor moves
+  augroup smartmove-searchjump
+    autocmd!
+    autocmd CursorMoved,CursorMovedI * call s:smartzz()
+    function! s:smartzz() " {{{
+      if exists('s:do_smartzz')
+        " TODO: 代替マップでエラーが起こったときの break を実装したい
+        let [isFirstjump, moveforward, lnum_when_starting] = s:do_smartzz
+        if isFirstjump
+          let s:do_smartzz[0] = 0
+          return
+        endif
+        let current_lnum = line('.')
+        if ((moveforward && current_lnum == line('w$'))
+        \ || (!moveforward && current_lnum == line('w0'))
+        \ ) && lnum_when_starting != current_lnum
+          normal! zz
+        endif
+        unlet s:do_smartzz
+      endif
+      autocmd! smartmove-searchjump
+      augroup! smartmove-searchjump
+    endfunction " }}}
+  augroup END
 endfunction " }}}
 function! smartmove#patsearch(pat, ...) " {{{
   let @/ = a:pat " v:searchforward is reset to forward
