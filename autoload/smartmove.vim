@@ -286,7 +286,7 @@ function! s:getSelection() " {{{
   \ [getreg('"', 1), getregtype('"')]
   \]
   try
-    normal! gv"vy
+    silent normal! gv"vy
     return @v
   finally
     call setreg('v', save_regs[0][0], save_regs[0][1])
