@@ -179,15 +179,24 @@ function! smartmove#smoothscroll(motion, mode) " {{{
   let n = (winheight(0) / 2) * cnt * unit
   if scrollforward
     let n = min([n, line('$') - line('w$')])
-    let key = line('.') == line('w$') ? "\<C-e>j" : "j\<C-e>"
+    let key = ["\<C-e>", 'j']
   else
     let n = min([n, line('w0') - 1])
-    let key = line('.') == line('w0') ? "\<C-y>k" : "k\<C-y>"
+    let key = ["\<C-y>", 'k']
   endif
   let i = cnt * unit * g:smartmove_scroll_speed
   while n > 0
     let n -= 1
-    silent execute 'normal!' key
+    " ウィンドウをスクロールさせるが以下の場合にカーソルが動く場合がある
+    "   下方スクロール時にカーソルがウィンドウ上端にある
+    "   上方スクロール時にカーソルがウィンドウ下端にある
+    "   &scrolloff が0より大きい値を持つ
+    let l = line('.')
+    silent execute 'normal!' key[0]
+    if line('.') == l
+      " スクロール後にカーソルが移動していなければ移動
+      silent execute 'normal!' key[1]
+    endif
     if n % i == 0
       redraw
     endif
