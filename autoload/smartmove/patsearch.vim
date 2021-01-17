@@ -28,7 +28,7 @@ function! s:buildTable() " {{{
         let i = 0
         while i < strlen(key)
           let char = key[i]
-          if char == "\<Esc>" || char == "\<C-c>"
+          if char ==# "\<Esc>" || char ==# "\<C-c>"
             " <Esc> と <C-c> は入力を中止するために予約済み
             throw 'The chars of "<Esc>" and "<C-c>" are not available in g:smartmove_patsearch_keys.'
           endif
@@ -60,8 +60,8 @@ function! s:patsearch(patname, ...) " {{{
   let pat = g:smartmove_patsearch_pats[a:patname]
   let objectSelection = get(a:, 1, '')
   call smartmove#patsearch(
-  \   objectSelection == 'a' ? '\V' . pat[0] . '\%(\%(' . pat[1] . '\)\@!\.\)\*' . pat[1]
-  \ : objectSelection == 'i' ? '\V' . pat[0] . '\zs\%(\%(' . pat[1] . '\)\@!\.\)\*\ze' . pat[1]
+  \   objectSelection ==# 'a' ? '\V' . pat[0] . '\%(\%(' . pat[1] . '\)\@!\.\)\*' . pat[1]
+  \ : objectSelection ==# 'i' ? '\V' . pat[0] . '\zs\%(\%(' . pat[1] . '\)\@!\.\)\*\ze' . pat[1]
   \ : '\V\%(' . (pat[0] ==# pat[-1] ? pat[0] : pat[0] . '\|' . pat[-1]) . '\)\+'
   \)
 endfunction " }}}

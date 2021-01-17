@@ -302,7 +302,7 @@ function! s:getSelection() " {{{
 endfunction " }}}
 function! smartmove#starsearch(motion, mode) " {{{
   let pat = substitute(escape(
-  \ a:mode == 'x' ? s:getSelection() : expand('<cword>'),
+  \ a:mode ==# 'x' ? s:getSelection() : expand('<cword>'),
   \ '\'), '\n', '\\n', 'g')
   if a:motion ==# '*' || a:motion ==# '#'
     let pat = '\<' . pat . '\>'
