@@ -1,6 +1,4 @@
-" File:        plugin/smartmove/patsearch.vim
-" Author:      sima (TwitterID: sima_fu)
-" Namespace:   http://f-u.seesaa.net/
+" File: plugin/smartmove/patsearch.vim
 
 scriptencoding utf-8
 
@@ -9,8 +7,8 @@ if exists('g:loaded_smartmove_patsearch')
 endif
 let g:loaded_smartmove_patsearch = 1
 
-let s:save_cpo = &cpo
-set cpo&vim
+let s:save_cpo = &cpoptions
+set cpoptions&vim
 
 let g:smartmove_patsearch_pats = get(g:, 'smartmove_patsearch_pats', {})
 let g:smartmove_patsearch_keys = get(g:, 'smartmove_patsearch_keys', {})
@@ -167,5 +165,5 @@ endif
 " mappings
 nnoremap <silent> <Plug>(smartmove-patsearch) :<C-u>call smartmove#patsearch#map()<CR>
 
-let &cpo = s:save_cpo
+let &cpoptions = s:save_cpo
 unlet s:save_cpo

@@ -1,11 +1,9 @@
-" File:        autoload/smartmove.vim
-" Author:      sima (TwitterID: sima_fu)
-" Namespace:   http://f-u.seesaa.net/
+" File: autoload/smartmove.vim
 
 scriptencoding utf-8
 
-let s:save_cpo = &cpo
-set cpo&vim
+let s:save_cpo = &cpoptions
+set cpoptions&vim
 
 function! s:SID_prefix() " {{{
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_prefix$')
@@ -316,5 +314,5 @@ function! smartmove#starsearch(motion, mode) " {{{
   call smartmove#patsearch('\V' . pat, searchforward)
 endfunction " }}}
 
-let &cpo = s:save_cpo
+let &cpoptions = s:save_cpo
 unlet s:save_cpo
