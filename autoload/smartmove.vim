@@ -156,7 +156,7 @@ endfunction " }}}
 function! smartmove#end(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
-  if c < col('$') - 1
+  if c < col('$') - strlen(matchstr(getline('.'), '.$'))
     silent execute 'normal! l' . (&wrap ? 'g$' : '$')
   else
     normal! g_
