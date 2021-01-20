@@ -275,6 +275,41 @@ function! smartmove#searchjump(motion, mode, ...) " {{{
     endfunction " }}}
   augroup END
 endfunction " }}}
+function! smartmove#searchjumppos(moveforward, ...) "{{{
+  try
+    let sc = searchcount({'recompute': 1, 'maxcount': 0})
+  catch
+    " maybe searched with an invalid regular expression
+    return
+  endtry
+  let target = has_key(a:, 1) ? a:1 > 0 ? a:1 : sc.total : v:count
+  if target == 0
+    " move forward or backward just a step ('wrapscan' applies)
+    let cnt = 1
+    let searchflags = a:moveforward ? '' : 'b'
+  elseif target > sc.total
+    " target match does not exist
+    let cnt = 0
+  else
+    " jump to the target match
+    if sc.current < target
+      let cnt = target - sc.current
+      let searchflags = 'W'
+    else
+      " move to the start position of the current match
+      call search(@/, 'bc')
+      let cnt = sc.current - target
+      let searchflags = 'bW'
+    endif
+  endif
+  for i in range(cnt)
+    let isMoved = search(@/, searchflags) > 0
+    if !isMoved | break | endif
+  endfor
+  " highlight all search pattern matches
+  call s:silentFeedkeys(printf(':<C-u>let %s = 1<CR>',
+        \ (g:smartmove_set_hlsearch ? '&' : 'v:') . 'hlsearch'), 'n')
+endfunction "}}}
 function! smartmove#patsearch(pat, ...) " {{{
   let @/ = a:pat " v:searchforward is reset to forward
   call histadd('/', a:pat)
