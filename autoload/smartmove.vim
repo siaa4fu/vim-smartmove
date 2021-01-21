@@ -57,7 +57,7 @@ function! s:exeMotion(motion, mode, usesFeedkeysCmd) " {{{
       execute 'normal' s:unescape_lhs(g:smartmove_motions[a:motion])
     endif
   else
-    silent execute 'normal!' a:motion
+    execute 'normal!' a:motion
   endif
 endfunction " }}}
 
@@ -145,9 +145,9 @@ function! smartmove#home(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
   if c > 1
-    silent execute 'normal! h' . (&wrap ? 'g^' : '^')
+    execute 'normal! h' . (&wrap ? 'g^' : '^')
     if col('.') == c
-      silent execute 'normal!' . (&wrap ? 'g0' : '0')
+      execute 'normal!' . (&wrap ? 'g0' : '0')
     endif
   else
     normal! ^
@@ -157,7 +157,7 @@ function! smartmove#end(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
   if c < col('$') - strlen(matchstr(getline('.'), '.$'))
-    silent execute 'normal! l' . (&wrap ? 'g$' : '$')
+    execute 'normal! l' . (&wrap ? 'g$' : '$')
   else
     normal! g_
   endif
@@ -190,10 +190,10 @@ function! smartmove#smoothscroll(motion, mode) " {{{
     "   上方スクロール時にカーソルがウィンドウ下端にある
     "   &scrolloff が0より大きい値を持つ
     let l = line('.')
-    silent execute 'normal!' key[0]
+    execute 'normal!' key[0]
     if line('.') == l
       " スクロール後にカーソルが移動していなければ移動
-      silent execute 'normal!' key[1]
+      execute 'normal!' key[1]
     endif
     if n % i == 0
       redraw
