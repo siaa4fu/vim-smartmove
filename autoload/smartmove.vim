@@ -322,23 +322,24 @@ function! smartmove#patsearch(pat, ...) " {{{
     call s:silentFeedkeys('<Plug>(smartmove-searchjump-n)', 'm')
   endif
 endfunction " }}}
-function! s:getSelection() " {{{
-  let save_regs = [
-  \ [getreg('v', 1), getregtype('v')],
-  \ [getreg('"', 1), getregtype('"')]
-  \]
+function! s:getCword(mode) " {{{
+  if a:mode !=# 'x'
+    return expand('<cword>')
+  endif
+  let restore_regs = {
+  \ '"': function('setreg', ['"', getreg('"', 1), getregtype('"')]),
+  \ 'v': function('setreg', ['v', getreg('v', 1), getregtype('v')])
+  \}
   try
     silent normal! gv"vy
     return @v
   finally
-    call setreg('v', save_regs[0][0], save_regs[0][1])
-    call setreg('"', save_regs[1][0], save_regs[1][1])
+    call restore_regs['"']()
+    call restore_regs['v']()
   endtry
 endfunction " }}}
 function! smartmove#starsearch(motion, mode) " {{{
-  let pat = substitute(escape(
-  \ a:mode ==# 'x' ? s:getSelection() : expand('<cword>'),
-  \ '\'), '\n', '\\n', 'g')
+  let pat = substitute(escape(s:getCword(a:mode), '\'), '\n', '\\n', 'g')
   if a:motion ==# '*' || a:motion ==# '#'
     let pat = '\<' . pat . '\>'
   endif
