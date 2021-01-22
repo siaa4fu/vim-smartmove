@@ -13,6 +13,9 @@ set cpoptions&vim
 " motions are used instead of w, b, e, ge, n and N commands
 " *, #, g* and g# commands use n command
 let g:smartmove_motions = get(g:, 'smartmove_motions', {})
+" when lines don't wrap, <Plug>(smartmove-home) and ...-end) don't move the
+" cursor to the leftmost or rightmost character on the screen by default
+let g:smartmove_multistep_homeend = get(g:, 'smartmove_multistep_homeend', 0)
 " smooth scroll speed (non-negative integer)
 let g:smartmove_scroll_speed = get(g:, 'smartmove_scroll_speed', 1)
 " set the 'hlsearch' option to new value when using search commands

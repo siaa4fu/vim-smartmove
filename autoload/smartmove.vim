@@ -147,7 +147,7 @@ function! smartmove#home(mode) " {{{
   let c_start = 1
   " on a blank line, c_firstnonblank indicates the '$' position
   let c_firstnonblank = strlen(matchstr(getline('.'), '^\s*')) + 1
-  if &wrap
+  if g:smartmove_multistep_homeend || &wrap
     if c > c_firstnonblank
       normal! hg0
       if col('.') < c_firstnonblank
@@ -174,7 +174,7 @@ function! smartmove#end(mode) " {{{
   let c_end = col('$') - strlen(matchstr(getline('.'), '.$'))
   " on a blank line, c_lastnonblank indicates the '0' position
   let c_lastnonblank = col('$') - strlen(matchstr(getline('.'), '\%(^\|\S\)\s*$'))
-  if &wrap
+  if g:smartmove_multistep_homeend || &wrap
     if c < c_lastnonblank
       normal! lg$
       if col('.') > c_lastnonblank
