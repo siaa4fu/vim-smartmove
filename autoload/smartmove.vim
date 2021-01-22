@@ -144,22 +144,55 @@ endfunction " }}}
 function! smartmove#home(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
-  if c > 1
-    execute 'normal! h' . (&wrap ? 'g^' : '^')
-    if col('.') == c
-      execute 'normal!' . (&wrap ? 'g0' : '0')
+  let c_start = 1
+  " on a blank line, c_firstnonblank indicates the '$' position
+  let c_firstnonblank = strlen(matchstr(getline('.'), '^\s*')) + 1
+  if &wrap
+    if c > c_firstnonblank
+      normal! hg0
+      if col('.') < c_firstnonblank
+        normal! ^
+      endif
+    elseif c > c_start
+      normal! hg0
+    else
+      normal! ^
     endif
   else
-    normal! ^
+    if c > c_firstnonblank
+      normal! ^
+    elseif c > c_start
+      normal! 0
+    else
+      normal! ^
+    endif
   endif
 endfunction " }}}
 function! smartmove#end(mode) " {{{
   call s:precmd(a:mode, 1)
   let c = col('.')
-  if c < col('$') - strlen(matchstr(getline('.'), '.$'))
-    execute 'normal! l' . (&wrap ? 'g$' : '$')
+  let c_end = col('$') - strlen(matchstr(getline('.'), '.$'))
+  " on a blank line, c_lastnonblank indicates the '0' position
+  let c_lastnonblank = col('$') - strlen(matchstr(getline('.'), '\%(^\|\S\)\s*$'))
+  if &wrap
+    if c < c_lastnonblank
+      normal! lg$
+      if col('.') > c_lastnonblank
+        normal! g_
+      endif
+    elseif c < c_end
+      normal! lg$
+    else
+      normal! g_
+    endif
   else
-    normal! g_
+    if c < c_lastnonblank
+      normal! g_
+    elseif c < c_end
+      normal! $
+    else
+      normal! g_
+    endif
   endif
 endfunction " }}}
 
