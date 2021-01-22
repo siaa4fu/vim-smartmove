@@ -126,6 +126,7 @@ function! smartmove#wiw(motion, mode) " {{{
         \   a:motion ==# 'w' || a:motion ==# 'e'  ? 1
         \ : a:motion ==# 'b' || a:motion ==# 'ge' ? 0
         \ : 1
+  let searchflags = (moveforward ? '' : 'b') . 'W'
   call s:precmd(a:mode,
         \ a:motion ==# 'e' || a:motion ==# 'ge')
   " rhysd/vim-textobj-wiw の regexp を参考
@@ -136,7 +137,7 @@ function! smartmove#wiw(motion, mode) " {{{
         \ : a:motion ==# 'e' || a:motion ==# 'ge' ? wiw_tail
         \ : wiw_head
   for i in range(cnt)
-    let isMoved = search(pat, (moveforward ? '' : 'b') . 'W') > 0
+    let isMoved = search(pat, searchflags) > 0
     if !isMoved | break | endif
   endfor
 endfunction " }}}
