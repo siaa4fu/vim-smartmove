@@ -149,23 +149,41 @@ function! smartmove#home(mode) " {{{
   " on a blank line, c_firstnonblank indicates the '$' position
   let c_firstnonblank = strlen(matchstr(getline('.'), '^\s*')) + 1
   if g:smartmove_multistep_homeend || &wrap
-    if c > c_firstnonblank
-      normal! hg0
-      if col('.') < c_firstnonblank
+    if c_start == c_firstnonblank
+      if c_start < c
+        normal! hg0
+        if col('.') <= c_start
+          normal! 0
+        endif
+      else
+        normal! 0
+      endif
+    else
+      if c_firstnonblank < c
+        normal! hg0
+        if col('.') <= c_firstnonblank
+          normal! ^
+        endif
+      elseif c_start < c
+        normal! hg0
+        if col('.') <= c_start
+          normal! 0
+        endif
+      else
         normal! ^
       endif
-    elseif c > c_start
-      normal! hg0
-    else
-      normal! ^
     endif
   else
-    if c > c_firstnonblank
-      normal! ^
-    elseif c > c_start
+    if c_start == c_firstnonblank
       normal! 0
     else
-      normal! ^
+      if c_firstnonblank < c
+        normal! ^
+      elseif c_start < c
+        normal! 0
+      else
+        normal! ^
+      endif
     endif
   endif
 endfunction " }}}
@@ -176,23 +194,41 @@ function! smartmove#end(mode) " {{{
   " on a blank line, c_lastnonblank indicates the '0' position
   let c_lastnonblank = col('$') - strlen(matchstr(getline('.'), '\%(^\|\S\)\s*$'))
   if g:smartmove_multistep_homeend || &wrap
-    if c < c_lastnonblank
-      normal! lg$
-      if col('.') > c_lastnonblank
+    if c_lastnonblank == c_end
+      if c < c_end
+        normal! lg$
+        if c_end <= col('.')
+          normal! $
+        endif
+      else
+        normal! $
+      endif
+    else
+      if c < c_lastnonblank
+        normal! lg$
+        if c_lastnonblank <= col('.')
+          normal! g_
+        endif
+      elseif c < c_end
+        normal! lg$
+        if  c_end <= col('.')
+          normal! $
+        endif
+      else
         normal! g_
       endif
-    elseif c < c_end
-      normal! lg$
-    else
-      normal! g_
     endif
   else
-    if c < c_lastnonblank
-      normal! g_
-    elseif c < c_end
+    if c_lastnonblank == c_end
       normal! $
     else
-      normal! g_
+      if c < c_lastnonblank
+        normal! g_
+      elseif c < c_end
+        normal! $
+      else
+        normal! g_
+      endif
     endif
   endif
 endfunction " }}}
