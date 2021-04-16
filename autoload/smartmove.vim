@@ -149,23 +149,41 @@ function! smartmove#home(mode) " {{{
   " on a blank line, c_firstnonblank indicates the '$' position
   let c_firstnonblank = strlen(matchstr(getline('.'), '^\s*')) + 1
   if g:smartmove_multistep_homeend || &wrap
-    if c > c_firstnonblank
-      normal! hg0
-      if col('.') < c_firstnonblank
+    if c_start == c_firstnonblank
+      if c > c_start
+        normal! hg0
+        if col('.') <= c_start
+          normal! 0
+        endif
+      else
+        normal! 0
+      endif
+    else
+      if c > c_firstnonblank
+        normal! hg0
+        if col('.') < c_firstnonblank
+          normal! ^
+        endif
+      elseif c > c_start
+        normal! hg0
+        if col('.') <= c_start
+          normal! 0
+        endif
+      else
         normal! ^
       endif
-    elseif c > c_start
-      normal! hg0
-    else
-      normal! ^
     endif
   else
-    if c > c_firstnonblank
-      normal! ^
-    elseif c > c_start
+    if c_start == c_firstnonblank
       normal! 0
     else
-      normal! ^
+      if c > c_firstnonblank
+        normal! ^
+      elseif c > c_start
+        normal! 0
+      else
+        normal! ^
+      endif
     endif
   endif
 endfunction " }}}
