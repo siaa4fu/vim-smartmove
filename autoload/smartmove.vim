@@ -150,7 +150,7 @@ function! smartmove#home(mode) " {{{
   let c_firstnonblank = strlen(matchstr(getline('.'), '^\s*')) + 1
   if g:smartmove_multistep_homeend || &wrap
     if c_start == c_firstnonblank
-      if c > c_start
+      if c_start < c
         normal! hg0
         if col('.') <= c_start
           normal! 0
@@ -159,12 +159,12 @@ function! smartmove#home(mode) " {{{
         normal! 0
       endif
     else
-      if c > c_firstnonblank
+      if c_firstnonblank < c
         normal! hg0
         if col('.') < c_firstnonblank
           normal! ^
         endif
-      elseif c > c_start
+      elseif c_start < c
         normal! hg0
         if col('.') <= c_start
           normal! 0
@@ -177,9 +177,9 @@ function! smartmove#home(mode) " {{{
     if c_start == c_firstnonblank
       normal! 0
     else
-      if c > c_firstnonblank
+      if c_firstnonblank < c
         normal! ^
-      elseif c > c_start
+      elseif c_start < c
         normal! 0
       else
         normal! ^
@@ -197,7 +197,7 @@ function! smartmove#end(mode) " {{{
     if c_lastnonblank == c_end
       if c < c_end
         normal! lg$
-        if col('.') >= c_end
+        if c_end <= col('.')
           normal! $
         endif
       else
@@ -206,12 +206,12 @@ function! smartmove#end(mode) " {{{
     else
       if c < c_lastnonblank
         normal! lg$
-        if col('.') > c_lastnonblank
+        if c_lastnonblank < col('.')
           normal! g_
         endif
       elseif c < c_end
         normal! lg$
-        if col('.') >= c_end
+        if  c_end <= col('.')
           normal! $
         endif
       else
