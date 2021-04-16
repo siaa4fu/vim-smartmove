@@ -176,15 +176,29 @@ function! smartmove#end(mode) " {{{
   " on a blank line, c_lastnonblank indicates the '0' position
   let c_lastnonblank = col('$') - strlen(matchstr(getline('.'), '\%(^\|\S\)\s*$'))
   if g:smartmove_multistep_homeend || &wrap
-    if c < c_lastnonblank
-      normal! lg$
-      if col('.') > c_lastnonblank
+    if c_lastnonblank == c_end
+      if c < c_end
+        normal! lg$
+        if col('.') >= c_end
+          normal! $
+        endif
+      else
+        normal! $
+      endif
+    else
+      if c < c_lastnonblank
+        normal! lg$
+        if col('.') > c_lastnonblank
+          normal! g_
+        endif
+      elseif c < c_end
+        normal! lg$
+        if col('.') >= c_end
+          normal! $
+        endif
+      else
         normal! g_
       endif
-    elseif c < c_end
-      normal! lg$
-    else
-      normal! g_
     endif
   else
     if c_lastnonblank == c_end
