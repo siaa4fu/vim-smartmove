@@ -187,12 +187,16 @@ function! smartmove#end(mode) " {{{
       normal! g_
     endif
   else
-    if c < c_lastnonblank
-      normal! g_
-    elseif c < c_end
+    if c_lastnonblank == c_end
       normal! $
     else
-      normal! g_
+      if c < c_lastnonblank
+        normal! g_
+      elseif c < c_end
+        normal! $
+      else
+        normal! g_
+      endif
     endif
   endif
 endfunction " }}}
