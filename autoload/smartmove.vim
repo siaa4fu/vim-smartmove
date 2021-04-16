@@ -161,7 +161,7 @@ function! smartmove#home(mode) " {{{
     else
       if c_firstnonblank < c
         normal! hg0
-        if col('.') < c_firstnonblank
+        if col('.') <= c_firstnonblank
           normal! ^
         endif
       elseif c_start < c
@@ -206,7 +206,7 @@ function! smartmove#end(mode) " {{{
     else
       if c < c_lastnonblank
         normal! lg$
-        if c_lastnonblank < col('.')
+        if c_lastnonblank <= col('.')
           normal! g_
         endif
       elseif c < c_end
