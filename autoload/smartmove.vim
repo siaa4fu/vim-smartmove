@@ -1,9 +1,4 @@
-" File: autoload/smartmove.vim
-
 scriptencoding utf-8
-
-let s:save_cpo = &cpoptions
-set cpoptions&vim
 
 function! s:SID_prefix() " {{{
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_prefix$')
@@ -419,6 +414,3 @@ function! smartmove#starsearch(motion, mode) " {{{
         \ : v:searchforward
   call smartmove#patsearch('\V' . pat, searchforward)
 endfunction " }}}
-
-let &cpoptions = s:save_cpo
-unlet s:save_cpo

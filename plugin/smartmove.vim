@@ -1,14 +1,9 @@
-" File: plugin/smartmove.vim
-
 scriptencoding utf-8
 
 if exists('g:loaded_smartmove')
   finish
 endif
 let g:loaded_smartmove = 1
-
-let s:save_cpo = &cpoptions
-set cpoptions&vim
 
 " motions are used instead of w, b, e, ge, n and N commands
 " *, #, g* and g# commands use n command
@@ -103,6 +98,3 @@ xnoremap <silent> <Plug>(smartmove-searchjump-#)     :<C-u>call smartmove#starse
 xnoremap <silent> <Plug>(smartmove-searchjump-g*)    :<C-u>call smartmove#starsearch('g*', 'x')<CR>
 xnoremap <silent> <Plug>(smartmove-searchjump-g#)    :<C-u>call smartmove#starsearch('g#', 'x')<CR>
 " }}}
-
-let &cpoptions = s:save_cpo
-unlet s:save_cpo

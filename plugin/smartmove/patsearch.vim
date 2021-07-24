@@ -1,14 +1,9 @@
-" File: plugin/smartmove/patsearch.vim
-
 scriptencoding utf-8
 
 if exists('g:loaded_smartmove_patsearch')
   finish
 endif
 let g:loaded_smartmove_patsearch = 1
-
-let s:save_cpo = &cpoptions
-set cpoptions&vim
 
 let g:smartmove_patsearch_pats = get(g:, 'smartmove_patsearch_pats', {})
 let g:smartmove_patsearch_keys = get(g:, 'smartmove_patsearch_keys', {})
@@ -164,6 +159,3 @@ endif
 
 " mappings
 nnoremap <silent> <Plug>(smartmove-patsearch) :<C-u>call smartmove#patsearch#map()<CR>
-
-let &cpoptions = s:save_cpo
-unlet s:save_cpo

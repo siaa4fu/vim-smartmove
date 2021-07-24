@@ -1,9 +1,4 @@
-" File: autoload/smartmove/patsearch.vim
-
 scriptencoding utf-8
-
-let s:save_cpo = &cpoptions
-set cpoptions&vim
 
 let s:mapprefix = '<SID>/'
 function! s:SID_prefix() " {{{
@@ -106,6 +101,3 @@ function! smartmove#patsearch#map() " {{{
     echohl ErrorMsg | echomsg v:exception | echohl None
   endtry
 endfunction " }}}
-
-let &cpoptions = s:save_cpo
-unlet s:save_cpo
