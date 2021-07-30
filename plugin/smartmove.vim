@@ -85,10 +85,10 @@ xnoremap <silent> <Plug>(smartmove-searchjump-n)     :<C-u>call smartmove#search
 xnoremap <silent> <Plug>(smartmove-searchjump-N)     :<C-u>call smartmove#searchjump('N', 'x')<CR>
 inoremap <silent> <Plug>(smartmove-searchjump-n)     <C-o>:<C-u>call smartmove#searchjump('n', 'i')<CR>
 inoremap <silent> <Plug>(smartmove-searchjump-N)     <C-o>:<C-u>call smartmove#searchjump('N', 'i')<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-[n)    :<C-u>call smartmove#searchjumppos(0)<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-]n)    :<C-u>call smartmove#searchjumppos(1)<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-first) :<C-u>call smartmove#searchjumppos(0, 1)<CR>
-nnoremap <silent> <Plug>(smartmove-searchjump-last)  :<C-u>call smartmove#searchjumppos(1, -1)<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-[n)    :<C-u>call smartmove#searchjumppos(0, 0)<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-]n)    :<C-u>call smartmove#searchjumppos(1, 0)<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-first) :<C-u>call smartmove#searchjumppos(0, v:count ? v:count : 1)<CR>
+nnoremap <silent> <Plug>(smartmove-searchjump-last)  :<C-u>call smartmove#searchjumppos(1, v:count ? v:count : -1)<CR>
 nnoremap <silent> <Plug>(smartmove-searchjump-*)     :<C-u>call smartmove#starsearch('*' , 'n')<CR>
 nnoremap <silent> <Plug>(smartmove-searchjump-#)     :<C-u>call smartmove#starsearch('#' , 'n')<CR>
 nnoremap <silent> <Plug>(smartmove-searchjump-g*)    :<C-u>call smartmove#starsearch('g*', 'n')<CR>

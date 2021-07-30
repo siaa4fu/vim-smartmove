@@ -340,17 +340,17 @@ function! smartmove#searchjump(motion, mode, ...) " {{{
     endfunction " }}}
   augroup END
 endfunction " }}}
-function! smartmove#searchjumppos(moveforward, ...) "{{{
+function! smartmove#searchjumppos(moveforward, target) "{{{
   try
     let sc = searchcount({'recompute': 1, 'maxcount': 0})
   catch
     " maybe searched with an invalid regular expression
     return
   endtry
-  let target = has_key(a:, 1) ? a:1 > 0 ? a:1 : sc.total : v:count
+  let target = a:target > -1 ? a:target : sc.total
   if target == 0
-    " move forward or backward just a step ('wrapscan' applies)
-    let cnt = 1
+    " move forward or backward [N] times ('wrapscan' applies)
+    let cnt = v:count1
     let searchflags = a:moveforward ? '' : 'b'
   elseif target > sc.total
     " target match does not exist
