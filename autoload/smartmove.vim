@@ -309,8 +309,8 @@ function! smartmove#searchjump(motion, mode, ...) " {{{
       "     同じ feedkeys() の中でコマンドをパイプで続けても同じ
       call s:skipClosedFold(moveforward)
       call s:exeMotion(a:motion, a:mode, 1)
-    catch /^Vim\%((\a\+)\)\=:E486/
-      echohl WarningMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
+    catch /^Vim\%((\a\+)\)\=:E486:/
+      echohl ErrorMsg | echomsg split(v:exception, '^Vim\%((\a\+)\)\=:')[-1] | echohl None
       if exists('s:do_smartzz') | unlet s:do_smartzz | endif
       return
     endtry
